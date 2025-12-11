@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL, // use frontend env
   withCredentials: true, // important for Sanctum CSRF
 });
 
@@ -14,7 +14,7 @@ api.interceptors.request.use(async (config) => {
   const method = config.method?.toLowerCase();
   if (!csrfFetched && ['post', 'put', 'patch', 'delete'].includes(method)) {
     try {
-      await axios.get('http://localhost:8000/api/sanctum/csrf-cookie', {
+      await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`, {
         withCredentials: true
       });
       csrfFetched = true;
